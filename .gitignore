@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment
+.venv/
+env/
+venv/
+.env
+
+# macOS
+.DS_Store
+
+# VS Code settings
+.vscode/
+
+# Temp files
+*.tmp
