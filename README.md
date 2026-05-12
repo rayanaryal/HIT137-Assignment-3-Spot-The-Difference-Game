@@ -27,7 +27,7 @@ First we created a folder named src, and inside the folder we created follwoing 
     5. difference_region.py (encapsulates the logic for a single difference point (the 'data' object for our differences))
 
 
-Creating folder name alterations inside folder named src. And following files are created inside alteration foler
+Creating folder name alterations inside folder named src. And following files are created inside alteration folder
     1. base.py
     2. color_shift.py
     3. blur_patch.py
@@ -55,7 +55,7 @@ Represents a single difference region in the image. It stores the position, size
 The game needs to track each difference separately. This class helps the GameLogic class check:
 - if the user clicked inside a difference
 - if the difference was already found
-- how many differences remain
+-  and how many differences remaining
 
 
 
@@ -70,7 +70,7 @@ The game needs to track each difference separately. This class helps the GameLog
 
 ### Attributes
 - 'regions': List of 'DifferenceRegion' objects.
-- 'max_mistakes': Maximum number of mistakes allowed, default is 3.
+- 'max_mistakes': Maximum number of mistakes allowed, by default it is set to 3.
 - 'mistakes': Current number of mistakes made by the user.
 - 'game_over': Boolean flag indicating whether the game has ended.
 
@@ -82,7 +82,7 @@ The game needs to track each difference separately. This class helps the GameLog
 - 'is_game_over()': Returns 'True' if the game is over.
 - 'reset()': Resets mistakes and found states for a new game.
 
-### Why this class exists
+### Why this class exists ?
 This class acts as the central controller for game rules. It keeps game logic separate from the GUI and makes the program easier to maintain and extend.
 
 
@@ -128,7 +128,7 @@ This reduces detail in that area, creating a subtle but noticeable difference fo
 ### Methods
 - 'apply(image, region)': Applies a Gaussian blur to the specified region and returns the modified image.
 
-### Why this class exists
+### Why this class exists?
 This class is another concrete implementation of the 'AlterationStrategy' base class. It demonstrates polymorphism by overriding 'apply()' with its own blur-based behaviour. It keeps image processing modular and allows 'ImageManager' to apply different alteration types without knowing how each one works internally.
 
 
@@ -136,7 +136,7 @@ This class is another concrete implementation of the 'AlterationStrategy' base c
 
 ### Purpose
 'BrightnessChange' adjusts the brightness of a selected region of the image.  
-This creates a subtle but visible difference by making the area slightly lighter or darker, which is ideal for a Spot-the-Difference game.
+This creates a subtle but visible difference by making the area slightly lighter or darker, which is ideal for this game.
 
 ### Attributes
 - 'brightness_factor': Numeric value controlling brightness adjustment. Values greater than '1.0' make the region brighter, while values less than '1.0' make it darker.
@@ -155,7 +155,7 @@ This class is a concrete implementation of 'AlterationStrategy'. It demonstrates
 'ImageManager' is responsible for loading images, generating random non-overlapping regions for modification, applying alteration strategies, and producing the final pair of images for the Spot-the-Difference game. It acts as the central controller that coordinates region generation and image modification.
 
 ### Responsibilities
-- Load the original image from disk.
+- Load the original image from own local disk.
 - Generate exactly 5 'DifferenceRegion' objects.
 - Ensure regions do not overlap.
 - Apply a randomly selected 'AlterationStrategy' to each region.
@@ -170,7 +170,7 @@ This class is a concrete implementation of 'AlterationStrategy'. It demonstrates
 - 'num_differences': Number of differences to generate, set to 5.
 
 ### Methods
-- 'load_image()': Loads the image from disk using OpenCV.
+- 'load_image()': Loads the image from local disk using OpenCV.
 - 'generate_regions()': Creates random, non-overlapping regions and ensures each region fits inside the image.
 - 'apply_strategies()': Applies a randomly selected 'AlterationStrategy' to each generated region.
 - 'get_original_image()': Returns the unmodified image.
@@ -192,17 +192,19 @@ This project uses a modular object-oriented design with three main classes:
 
 Together, these classes separate image processing, game rules, and data storage.
 
+
 ### ImageManager
 
 'ImageManager' prepares the original and modified images.
 
 It is responsible for:
 - loading the image,
-- generating five non-overlapping difference regions,
+- generating 5 non-overlapping difference regions,
 - applying random OpenCV-based alterations,
 - storing both the original and modified images.
 
 This class keeps all image-processing tasks in one place.
+
 
 ### DifferenceRegion
 
@@ -230,14 +232,13 @@ This class connects the GUI with the image management layer.
 
 ### Class Interaction
 
-'''text
 GUI -> GameLogic -> ImageManager -> DifferenceRegion
-'''
 
 The GUI handles user input and display.  
 'GameLogic' applies the game rules.  
 'ImageManager' prepares the images and regions.  
 'DifferenceRegion' stores the details of each difference.
+
 
 ## GUI Design
 
@@ -253,24 +254,26 @@ Its main responsibilities are:
 
 The GUI does not contain game rules; it delegates that work to 'GameLogic'.
 
+
 ### Layout
 
 The window is organized into three areas:
 
-- **Title area** for the game heading.
-- **Image area** for the original and modified images.
-- **Control panel** for counters and buttons.
+- Title area: for the game heading.
+- Image area: for the original and modified images.
+- Control panel: for counters and buttons.
 
 The modified image is the only one that responds to clicks.
+
 
 ### Interaction Flow
 
 1. The player clicks on the modified image.
 2. The GUI sends the click coordinates to 'GameLogic'.
 3. If a difference is found, the GUI draws a red circle around it.
-4. If the reveal option is used, unfound differences are marked with blue circles.
+4. If user click reveal option, unfound differences are marked with blue circles.
 5. The interface updates the remaining differences and mistake count after each action.
 
 ### Design Benefits
 
-This structure keeps the program clear, maintainable, and easy to extend. It also supports clean separation of concerns and matches the assignment requirements well.
+This structure keeps the program clear, maintainable, and easy to extend.
