@@ -1,40 +1,63 @@
 class DifferenceRegion:
-    '''
-    Represents a single difference region in the image. 
-    Stores the position, size, alteration type, and whether it has been found.
-    '''
+    """
+    Represents one hidden difference region in the image.
+    Stores position, size, and found state.
+    """
 
-    def __init__(self, x, y, width, height, alteration_type): # Position and size of the difference region
-        self.x=x
-        self.y=y
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
         self.width = width
         self.height = height
-        self.alteration_type = alteration_type # alteration will be applied e.g., blur, color shift, brightness change)
-        self.found = False  # tracks whethe the user has already found this region
+        self.found = False
 
-    @property
-    def region(self):
-        return (self.x, self.y, self.width, self.height) #returns the region as a tuple (x,y, width, height). Useful for drawing or debugging.
-    
-    def contains_point(self, click_x, click_y, tolerance=10): #Check if a user's click(x,y) is inside this region. A tolerance helps clicking easier
+    def get_bbox(self):
+        """
+        Return the bounding box as (x1, y1, x2, y2).
+        """
+        return self.x, self.y, self.x + self.width, self.y + self.height
+
+    def get_rect(self):
+        """
+        Return the rectangle as (x, y, w, h).
+        Useful for OpenCV strategies.
+        """
+        return self.x, self.y, self.width, self.height
+
+    def contains_point(self, x, y, tolerance=10):
+        """
+        Return True if a point falls inside the region, including tolerance.
+        """
         return (
-            self.x-tolerance <= click_x<=self.x + self.width +tolerance and self.y - tolerance <= click_y <= self.y + self.height + tolerance
+            self.x - tolerance <= x <= self.x + self.width + tolerance
+            and self.y - tolerance <= y <= self.y + self.height + tolerance
         )
 
-    def mark_found(self): # Mark this region as found
+    def overlaps(self, other):
+        """
+        Return True if this region overlaps another region.
+        """
+        return not (
+            self.x + self.width <= other.x
+            or other.x + other.width <= self.x
+            or self.y + self.height <= other.y
+            or other.y + other.height <= self.y
+        )
+
+    def mark_found(self):
+        """
+        Mark this region as found.
+        """
         self.found = True
 
-    def is_found(self): #return true if the region has already been found
+    def is_found(self):
+        """
+        Return True if the region has already been found.
+        """
         return self.found
-    
-    def __repr__(self): # Returb a developer-friendly string representation of the region; useful for debugging and loggin
-        return(
-            f"DifferenceRegion(x={self.x}, y={self.y}," 
-            f"width={self.width}", height ={self.height}, found={self.found}
-            )"
-        
-        
 
-
-
-
+    def reset(self):
+        """
+        Reset the region to not found.
+        """
+        self.found = False
